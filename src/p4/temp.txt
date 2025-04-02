@@ -1,0 +1,174 @@
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Processing packet received on port 1
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser 'parser': start
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser 'parser' entering state 'start'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Extracting header 'ethernet'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser state 'start': key is 0800
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Bytes parsed: 14
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Extracting header 'ipv4'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser state 'parse_ipv4': key is 11
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Bytes parsed: 34
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser 'parser' entering state 'parse_udp'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Extracting header 'udp'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser state 'parse_udp': key is c350ce64
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Bytes parsed: 42
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser 'parser' entering state 'parse_netcache'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Extracting header 'netcache'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser state 'parse_netcache' has no switch, going to default next state
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Bytes parsed: 191
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Parser 'parser': end
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Pipeline 'ingress': start
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/ingress.p4(356) Condition "hdr.netcache.isValid()" (node_2) is true
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Applying table 'MyIngress.lookup_table'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Looking up key:
+* hdr.netcache.key    : 00000000000000000063746573745f34
+
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Table 'MyIngress.lookup_table': miss
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Action entry is NoAction - 
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Action NoAction
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/ingress.p4(494) Condition "hdr.netcache.op == HOT_READ_QUERY" (node_51) is false
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Applying table 'MyIngress.l2_forward'
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Looking up key:
+* hdr.ethernet.dstAddr: 00000a000001
+
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Table 'MyIngress.l2_forward': hit with handle 3
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Dumping entry 3
+Match key:
+* hdr.ethernet.dstAddr: EXACT     00000a000001
+Action entry: MyIngress.set_egress_port - 3,
+
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Action entry is MyIngress.set_egress_port - 3,
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] Action MyIngress.set_egress_port
+[16:42:14.564] [bmv2] [T] [thread 57006] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/ingress.p4(35) Primitive standard_metadata.egress_spec = port
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Pipeline 'ingress': end
+[16:42:14.564] [bmv2] [D] [thread 57006] [0.0] [cxt 0] Egress port is 3
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Pipeline 'egress': start
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(38) Condition "hdr.netcache.isValid()" (node_57) is true
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(43) Condition "hdr.netcache.op == READ_QUERY" (node_58) is true
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(46) Condition "cache_hit" (node_59) is false
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(50) Condition "((standard_metadata.instance_type == 0) || (standard_metadata.instance_type == 5)) && hdr.udp.srcPort != NETCACHE_PORT" (node_61) is true
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Applying table 'tbl_update_count_min_sketch'
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Looking up key:
+
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Table 'tbl_update_count_min_sketch': miss
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Action entry is MyEgress.update_count_min_sketch - 
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Action MyEgress.update_count_min_sketch
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(66) Primitive hdr.netcache.key
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(65) Primitive hash(sketch_idx1, HashAlgorithm.crc32_custom, (bit<1>) 0, ...
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] hash(base=0, max=65535) = 27134
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(67) Primitive (bit<32>) sketch_idx1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(67) Primitive sketch1.read(sketch_val1, (bit<32>) sketch_idx1)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Read register 'MyEgress.sketch1' at index 27134 read value 0
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(68) Primitive (bit<32>) sketch_idx1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(68) Primitive sketch_val1+1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(68) Primitive sketch1.write((bit<32>) sketch_idx1, sketch_val1+1)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Wrote register 'MyEgress.sketch1' at index 27134 with value 1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(74) Primitive hdr.netcache.key
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(73) Primitive hash(sketch_idx2, HashAlgorithm.crc32_custom, (bit<1>) 0, ...
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] hash(base=0, max=65535) = 64064
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(75) Primitive (bit<32>) sketch_idx2
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(75) Primitive sketch2.read(sketch_val2, (bit<32>) sketch_idx2)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Read register 'MyEgress.sketch2' at index 64064 read value 0
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(76) Primitive (bit<32>) sketch_idx2
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(76) Primitive sketch_val2+1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(76) Primitive sketch2.write((bit<32>) sketch_idx2, sketch_val2+1)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Wrote register 'MyEgress.sketch2' at index 64064 with value 1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(82) Primitive hdr.netcache.key
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(81) Primitive hash(sketch_idx3, HashAlgorithm.crc32_custom, (bit<1>) 0, ...
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] hash(base=0, max=65535) = 27162
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(83) Primitive (bit<32>) sketch_idx3
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(83) Primitive sketch3.read(sketch_val3, (bit<32>) sketch_idx3)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Read register 'MyEgress.sketch3' at index 27162 read value 0
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(84) Primitive (bit<32>) sketch_idx3
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(84) Primitive sketch_val3+1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(84) Primitive sketch3.write((bit<32>) sketch_idx3, sketch_val3+1)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Wrote register 'MyEgress.sketch3' at index 27162 with value 1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(89) Primitive hdr.netcache.key
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(88) Primitive hash(sketch_idx4, HashAlgorithm.crc32_custom, (bit<1>) 0, ...
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] hash(base=0, max=65535) = 17500
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(90) Primitive (bit<32>) sketch_idx4
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(90) Primitive sketch4.read(sketch_val4, (bit<32>) sketch_idx4)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Read register 'MyEgress.sketch4' at index 17500 read value 0
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(91) Primitive (bit<32>) sketch_idx4
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(91) Primitive sketch_val4+1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(91) Primitive sketch4.write((bit<32>) sketch_idx4, sketch_val4+1)
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Wrote register 'MyEgress.sketch4' at index 17500 with value 1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(96) Primitive if
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(98) Primitive meta.key_cnt = sketch_val1
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(101) Primitive if
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(103) Primitive meta.key_cnt = sketch_val2
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(106) Primitive if
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(108) Primitive meta.key_cnt = sketch_val3
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(111) Primitive if
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/query_statistics.p4(113) Primitive meta.key_cnt = sketch_val4
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(53) Condition "meta.key_cnt >= 3" (node_63) is false
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Pipeline 'egress': end
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Deparser 'deparser': start
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Updating checksum 'cksum'
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Updating checksum 'cksum_0'
+[16:42:14.564] [bmv2] [T] [thread 57010] [0.0] [cxt 0] Skipping checksum 'cksum_1' update because condition not met
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Deparsing header 'ethernet'
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Deparsing header 'ipv4'
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Deparsing header 'udp'
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Deparsing header 'netcache'
+[16:42:14.564] [bmv2] [D] [thread 57010] [0.0] [cxt 0] Deparser 'deparser': end
+[16:42:14.565] [bmv2] [D] [thread 57011] [0.0] [cxt 0] Transmitting packet of size 191 out of port 3
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Processing packet received on port 3
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser 'parser': start
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser 'parser' entering state 'start'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Extracting header 'ethernet'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser state 'start': key is 0800
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Bytes parsed: 14
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Extracting header 'ipv4'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser state 'parse_ipv4': key is 11
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Bytes parsed: 34
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser 'parser' entering state 'parse_udp'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Extracting header 'udp'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser state 'parse_udp': key is ce64c350
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Bytes parsed: 42
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser 'parser' entering state 'parse_netcache'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Extracting header 'netcache'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser state 'parse_netcache' has no switch, going to default next state
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Bytes parsed: 191
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Parser 'parser': end
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Pipeline 'ingress': start
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] /home/kslu2/netcache/src/p4/core/ingress.p4(356) Condition "hdr.netcache.isValid()" (node_2) is true
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Applying table 'MyIngress.lookup_table'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Looking up key:
+* hdr.netcache.key    : 00000000000000000063746573745f34
+
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Table 'MyIngress.lookup_table': miss
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Action entry is NoAction - 
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Action NoAction
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] /home/kslu2/netcache/src/p4/core/ingress.p4(494) Condition "hdr.netcache.op == HOT_READ_QUERY" (node_51) is false
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Applying table 'MyIngress.l2_forward'
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Looking up key:
+* hdr.ethernet.dstAddr: 00000a000005
+
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Table 'MyIngress.l2_forward': hit with handle 7
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Dumping entry 7
+Match key:
+* hdr.ethernet.dstAddr: EXACT     00000a000005
+Action entry: MyIngress.set_egress_port - 1,
+
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Action entry is MyIngress.set_egress_port - 1,
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] Action MyIngress.set_egress_port
+[16:42:14.565] [bmv2] [T] [thread 57006] [1.0] [cxt 0] /home/kslu2/netcache/src/p4/core/ingress.p4(35) Primitive standard_metadata.egress_spec = port
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Pipeline 'ingress': end
+[16:42:14.565] [bmv2] [D] [thread 57006] [1.0] [cxt 0] Egress port is 1
+[16:42:14.565] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Pipeline 'egress': start
+[16:42:14.565] [bmv2] [T] [thread 57008] [1.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(38) Condition "hdr.netcache.isValid()" (node_57) is true
+[16:42:14.565] [bmv2] [T] [thread 57008] [1.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(43) Condition "hdr.netcache.op == READ_QUERY" (node_58) is false
+[16:42:14.565] [bmv2] [T] [thread 57008] [1.0] [cxt 0] /home/kslu2/netcache/src/p4/core/egress.p4(79) Condition "hdr.netcache.op == DELETE_COMPLETE && cache_hit" (node_68) is false
+[16:42:14.565] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Pipeline 'egress': end
+[16:42:14.565] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Deparser 'deparser': start
+[16:42:14.565] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Updating checksum 'cksum'
+[16:42:14.565] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Updating checksum 'cksum_0'
+[16:42:14.565] [bmv2] [T] [thread 57008] [1.0] [cxt 0] Skipping checksum 'cksum_1' update because condition not met
+[16:42:14.565] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Deparsing header 'ethernet'
+[16:42:14.565] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Deparsing header 'ipv4'
+[16:42:14.566] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Deparsing header 'udp'
+[16:42:14.566] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Deparsing header 'netcache'
+[16:42:14.566] [bmv2] [D] [thread 57008] [1.0] [cxt 0] Deparser 'deparser': end
+[16:42:14.566] [bmv2] [D] [thread 57011] [1.0] [cxt 0] Transmitting packet of size 191 out of port 1

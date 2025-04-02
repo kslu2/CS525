@@ -1,0 +1,66 @@
+{
+    "p4_src": "core/netcache.p4",
+    "cli": true,
+    "pcap_dump": false,
+    "enable_log": true,
+    "host_node":
+    {
+      "file_path": "",
+      "module_name": "p4utils.mininetlib.node",
+      "object_name": "P4Host"
+    },
+    "switch_node":
+    {
+      "file_path": "",
+      "module_name": "p4utils.mininetlib.node",
+      "object_name": "P4Switch"
+    },
+    "router_node":
+    {
+      "file_path": "",
+      "module_name": "p4utils.mininetlib.node",
+      "object_name": "FRRouter"
+    },
+    "compiler_module":
+    {
+      "file_path": "",
+      "module_name": "p4utils.utils.compiler",
+      "object_name": "P4C"
+    },
+    "mininet_module": {
+      "file_path": "",
+      "module_name": "p4utils.mininetlib.net",
+      "object_name": "P4Mininet"
+    },
+    "topology": {
+      "assignment_strategy" : "l2",
+      "links": [
+          ["server1", "s1"],
+          ["server2", "s1"],
+          ["server3", "s1"],
+          ["server4", "s1"],
+          ["client1", "s1"]
+      ],
+      "hosts": {
+          "server1": { },
+          "server2": { },
+          "server3": { },
+          "server4": { },
+          "client1": { }
+      },
+      "switches": {
+        "s1": {
+          "p4_src": "core/netcache.p4",
+          "cpu_port": true,
+          "cli_input": "s1-commands.txt",
+          "log_enabled": true,
+          "pcap_dump": false,
+          "pcap_dir": "",
+          "sw_bin": "simple_switch",
+          "thrift_port": 9090,
+          "grpc_port": 50051
+        }
+      }
+    }
+  }
+  
