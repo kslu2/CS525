@@ -18,7 +18,7 @@ NETCACHE_KEY_NOT_FOUND = 20
 def convert(val):
 	return int.from_bytes(bytes(val, "utf-8"), "big")
 
-def build_message(op, key, seq=0, value = ""):
+def build_message(op, key = "", seq=0, value = ""):
 
     msg = bytearray()
     msg += op.to_bytes(1, 'big')
@@ -120,23 +120,20 @@ class NetCacheClient:
             print(val)
 
 
-    def flush(self, key, seq = 0):
-        msg = build_message(NETCACHE_FLUSH_QUERY, key, seq)
+    def flush(self, seq = 0):
+        msg = build_message(NETCACHE_FLUSH_QUERY, seq)
         if msg is None:
             return
 
-        tcps = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        tcps.connect((self.get_node(key), self.port))
+        self.udps.connect((self.get_node(key), self.port))
+        self.udps.send(msg)
 
         start_time = time.time()
 
-        tcps.send(msg)
-        status = tcps.recv(1024)
+        data = self.udps.recv(1024)
+        op = data[0]
 
         latency = time.time() - start_time
         self.latencies.append(latency)
 
-        if status[0] == NETCACHE_KEY_NOT_FOUND:
-            print('Error: Key not found (key = ' + key + ')')
-
-        tcps.close()
+        print(f"Received Flush Complete {op}")

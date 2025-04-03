@@ -406,20 +406,20 @@ control MyIngress(inout headers hdr,
 							standard_metadata.instance_type = pkt_instance_type_normal;
 						}
                     }
-                    else if (hdr.netcache.op == FLUSH_QUERY) {
-                        cache_status.write((bit<32>) meta.key_idx, (bit<1>) 0);
-					}
 				}
 				NoAction: {
 					if (hdr.netcache.op == WRITE_QUERY) {
 						if (pkt_is_not_mirrored) {
-							log_msg("Header Value1 {}", {hdr.netcache.value});
-							log_msg("Header Value2 {}", {hdr.netcache.value2});
 							clone(CloneType.I2E, CONTROLLER_MIRROR_SESSION);
 							ret_pkt_to_sender();
 						}
 					} else if (hdr.netcache.op == READ_QUERY) {
 						hdr.netcache.op = READ_FAIL;
+					} else if (hdr.netcache.op == FLUSH_QUERY) {
+						if (pkt_is_not_mirrored) {
+							clone(CloneType.I2E, CONTROLLER_MIRROR_SESSION);
+							ret_pkt_to_sender();
+						}
 					}
 				}
             }

@@ -27,8 +27,6 @@ control MyEgress(inout headers hdr,
                  inout metadata meta,
                  inout standard_metadata_t standard_metadata) {
 
-	#include "query_statistics.p4"
-
     apply {
 		if (hdr.netcache.isValid()) {
 			// if the bitmap is not full of zeros then we had cache hit

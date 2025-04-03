@@ -44,7 +44,6 @@ const bit<8> WRITE_QUERY = 0x01;
 const bit<8> FLUSH_QUERY = 0x02;
 const bit<8> READ_QUERY = 0x00;
 const bit<8> FLUSH_COMPLETE = 0x05;
-const bit<8> CACHED_UPDATE = 0x06;
 
 /* netcache header field types */
 typedef bit<NETCACHE_KEY_WIDTH> key_t;

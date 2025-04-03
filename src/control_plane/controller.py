@@ -257,31 +257,28 @@ class NCacheController(object):
 
     # flush the entire kv cache
     def flush(self):
+        for key in list(self.key_map.keys()):
+            # delete entry from the lookup_table
+            entry_handle = self.controller.get_handle_from_match(
+                    NETCACHE_LOOKUP_TABLE, [str(self.str_to_int(key)), ])
 
-        if key not in self.key_map:
-            return
+            if entry_handle is not None:
+                self.controller.table_delete(NETCACHE_LOOKUP_TABLE, entry_handle)
 
-        # delete entry from the lookup_table
-        entry_handle = self.controller.get_handle_from_match(
-                NETCACHE_LOOKUP_TABLE, [str(self.str_to_int(key)), ])
+            # delete mapping of key from controller's dictionary
+            vt_idx, bitmap, key_idx = self.key_map[key]
+            del self.key_map[key]
 
-        if entry_handle is not None:
-            self.controller.table_delete(NETCACHE_LOOKUP_TABLE, entry_handle)
+            # deallocate space from memory pool
+            self.mem_pool[vt_idx] = self.mem_pool[vt_idx] ^ bitmap
+            self.used_mem_slots = self.used_mem_slots - bin(bitmap).count("1")
 
-        # delete mapping of key from controller's dictionary
-        vt_idx, bitmap, key_idx = self.key_map[key]
-        del self.key_map[key]
+            # free the id used to index the validity/counter register and append
+            # it back to the id pool of the controller
+            self.ids_pool.append(key_idx)
 
-        # deallocate space from memory pool
-        self.mem_pool[vt_idx] = self.mem_pool[vt_idx] ^ bitmap
-        self.used_mem_slots = self.used_mem_slots - bin(bitmap).count("1")
-
-        # free the id used to index the validity/counter register and append
-        # it back to the id pool of the controller
-        self.ids_pool.append(key_idx)
-
-        # mark cache entry as valid again (should be the last thing to do)
-        self.controller.register_write("cache_status", key_idx, 1)
+            # mark cache entry as valid again (should be the last thing to do)
+            self.controller.register_write("cache_status", key_idx, 1)
 
 
     # handling reports from the switch corresponding to hot keys, updates to
@@ -309,8 +306,8 @@ class NCacheController(object):
             self.insert(key, value)
 
         elif op == NETCACHE_FLUSH_QUERY:
-            print("Received query to delete key = " + key)
-
+            print("Received query to flush")
+            self.flush()
 
         else:
             print("Error: unrecognized operation field of netcache header")
