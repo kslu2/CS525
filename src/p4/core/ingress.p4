@@ -143,130 +143,77 @@ control MyIngress(inout headers hdr,
 		// store value of the array at this stage
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt0.read(curr_stage_val, (bit<32>) meta.vt_idx);
-		if (meta.recirc_cnt < 0x00000004) {
-			if (meta.recirc_cnt > 0x00000000) {
-				hdr.netcache.value = meta.temp_value;
-				hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			} else {
-				hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value;
-			}
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
+		if (meta.recirc_cnt > 0x00000000) {
+			hdr.netcache.value = meta.temp_value;
+			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		} else {
-			if (meta.recirc_cnt > 0x00000004) {
-				hdr.netcache.value2 = meta.temp_value;
-				hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			} else {
-				hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2;
-			}
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
+			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value;
 		}
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 
 	action process_array_1() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt1.read(curr_stage_val, (bit<32>) meta.vt_idx);
-		if (meta.recirc_cnt < 0x00000004) {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		} else {
-			hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		}
+		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_2() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt2.read(curr_stage_val, (bit<32>) meta.vt_idx);
 
-		if (meta.recirc_cnt < 0x00000004) {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		} else {
-			hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		}
+		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_3() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt3.read(curr_stage_val, (bit<32>) meta.vt_idx);
 
-		if (meta.recirc_cnt < 0x00000004) {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		} else {
-			hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		}
+		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_4() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt4.read(curr_stage_val, (bit<32>) meta.vt_idx);
 
-		if (meta.recirc_cnt < 0x00000004) {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		} else {
-			hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		}
+		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_5() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt5.read(curr_stage_val, (bit<32>) meta.vt_idx);
 
-		if (meta.recirc_cnt < 0x00000004) {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		} else {
-			hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		}
+		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_6() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt6.read(curr_stage_val, (bit<32>) meta.vt_idx);
 
-		if (meta.recirc_cnt < 0x00000004) {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		} else {
-			hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		}
+		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_7() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
 		vt7.read(curr_stage_val, (bit<32>) meta.vt_idx);
 
-		if (meta.recirc_cnt < 0x00000004) {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-			hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		} else {
-			hdr.netcache.value2 = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value2 << 64;
-			hdr.netcache.value2 = hdr.netcache.value2 | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-			valid_stages_num = valid_stages_num + 1;
-		}
+		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
+		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
+		valid_stages_num = valid_stages_num + 1;
 	}
 
 
@@ -396,11 +343,7 @@ control MyIngress(inout headers hdr,
 						update_recirculate_processing_count_by_num(0x00000001);
 						if (meta.recirc_cnt < RECIRCULATION_COUNT) {
 							standard_metadata.instance_type = pkt_instance_type_ingress_recirc;
-							if (meta.recirc_cnt < 0x00000004) {
-								meta.temp_value = hdr.netcache.value;
-							} else {
-								meta.temp_value = hdr.netcache.value2;
-							}
+							meta.temp_value = hdr.netcache.value;
 							set_egress_port_recirculation();
 						} else {
 							standard_metadata.instance_type = pkt_instance_type_normal;

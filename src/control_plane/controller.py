@@ -21,6 +21,7 @@ CONTROLLER_MIRROR_SESSION = 100
 NETCACHE_READ_QUERY = 0
 NETCACHE_WRITE_QUERY = 1
 NETCACHE_FLUSH_QUERY = 2
+NETCACHE_INIT_QUERY = 6
 NETCACHE_VALUE_SIZE = 2048
 
 UNIX_CHANNEL = '/tmp/server_cont.s'
@@ -35,7 +36,7 @@ crc32_polinomials = [0x04C11DB7, 0xEDB88320, 0xDB710641, 0x82608EDB,
 class NetcacheHeader(Packet):
     name = 'NcachePacket'
     fields_desc = [BitField('op', 0, 8), BitField('seq', 0, 32),
-            BitField('key', 0, 128), BitField('value', 0, NETCACHE_VALUE_SIZE), BitField('value2', 0, NETCACHE_VALUE_SIZE)]
+            BitField('key', 0, 128), BitField('value', 0, NETCACHE_VALUE_SIZE)]
 
 
 class NCacheController(object):
@@ -168,11 +169,10 @@ class NCacheController(object):
         vt_index = mem_info
         # keep track of number of bytes of the value written so far
         cnt = 0
-        print("Reached past first_fit")
         # store the value of the key in the vtables of the switch while
         # incrementally storing a part of the value at each value table
         # if the correspoding bit of the bitmap is set
-        for j in range(8):
+        for j in range(4):
             for i in range(self.vtables_num):
                 partial_val = value[cnt:cnt+VTABLE_SLOT_SIZE]
                 self.controller.register_write(VTABLE_NAME_PREFIX + str(i),
@@ -295,9 +295,7 @@ class NCacheController(object):
             ncache_header = NetcacheHeader(pkt[TCP].payload)
 
         key = self.int_to_packed(ncache_header.key, max_width=128)
-        value1 = self.int_to_packed(ncache_header.value, max_width=NETCACHE_VALUE_SIZE)
-        value2 = self.int_to_packed(ncache_header.value2, max_width=NETCACHE_VALUE_SIZE)
-        value = value1 + value2
+        value = self.int_to_packed(ncache_header.value, max_width=NETCACHE_VALUE_SIZE)
 
         op = ncache_header.op
 

@@ -1,6 +1,8 @@
 import socket
 import time
 import sys
+import grpc
+import io
 
 NETCACHE_PORT = 50000
 NOCACHE_PORT = 50001
@@ -9,10 +11,14 @@ MAX_SUPPORTED_SERVERS = 254
 
 NETCACHE_READ_QUERY = 0
 NETCACHE_FLUSH_QUERY = 2
+NETCACHE_INIT_QUERY = 6
 
-NETCACHE_VALUE_SIZE = 512
+NETCACHE_VALUE_SIZE = 256
 
 NETCACHE_KEY_NOT_FOUND = 20
+
+SYSTEM_PROMPT = "You are a helpful and informative AI assistant."
+
 
 
 def convert(val):
@@ -55,6 +61,56 @@ class NetCacheClient:
         # store all latencies of the requests sent (used for evaluation)
         self.latencies = []
 
+    def send_system_prompt(self, seq = 0):
+        msg = build_message(NETCACHE_INIT_QUERY, "init", seq, SYSTEM_PROMPT)
+        if msg is None:
+            return
+
+        start_time = time.time()
+        self.udps.connect(('10.0.0.1', self.port))
+        self.udps.send(msg)
+
+        data = self.udps.recv(1024)
+        op = data[0]
+
+        latency = time.time() - start_time
+        self.latencies.append(latency)
+
+        if op == NETCACHE_KEY_NOT_FOUND:
+            print('Error: Key not found (key = ' + key + ')')
+        else:
+            val = data[21:].decode("utf-8")
+            print(val)
+
+    def configure(self):
+
+        # Load probe examples from the dataset.
+        dataset_path = "hf://datasets/Naomibas/llm-system-prompts-benchmark/hundred_system_prompts.json"
+        probes = load_probes(dataset_path)
+        logger.info(f"Loaded {len(probes)} probes from dataset.")
+
+        baseline_times = []
+        kv_cache_times = []
+
+        # Loop over the probes and measure inference time for both experiments.
+        for probe in probes[:1]:
+            # Baseline experiment: without kv cache.
+            t_baseline, token_baseline = run_inference(stub, probe, use_kv_cache=False)
+            baseline_times.append(t_baseline)
+
+            # KV Cache experiment: send the precomputed system prompt kv cache.
+            t_kv, token_kv = run_inference(stub, probe, use_kv_cache=True, kv_cache_bytes=kv_cache_bytes, prompt_len=prompt_len)
+            kv_cache_times.append(t_kv)
+
+        avg_baseline = sum(baseline_times) / len(baseline_times)
+        avg_kv_cache = sum(kv_cache_times) / len(kv_cache_times)
+        speedup = avg_baseline / avg_kv_cache if avg_kv_cache > 0 else float('inf')
+
+        print("\n=== Experiment Results ===")
+        print(f"Baseline average time to first token: {avg_baseline:.6f} seconds")
+        print(f"KV Cache average time to first token: {avg_kv_cache:.6f} seconds")
+        print(f"Speedup factor: {speedup:.2f}x")
+
 
     # the IP addresses assigned to servers are based on the assignment
     # strategy defined at the p4app.json file; the basic l2 strategy
@@ -93,6 +149,31 @@ class NetCacheClient:
 
         return -1
 
+    def run_inference(stub, probe, use_kv_cache=False, kv_cache_bytes=None, prompt_len=-1):
+        """
+        Make an inference RPC call. If use_kv_cache is True and kv_cache_bytes is provided,
+        include it in the request.
+        """
+        request = kv_cache_pb2.InferenceRequest(input=SYSTEM_PROMPT + probe) 
+
+        if use_kv_cache and kv_cache_bytes is not None:
+            request.kv_cache = kv_cache_bytes
+            request.prompt_len = prompt_len
+
+        start = time.time()
+        response = stub.Inference(request)
+        elapsed = time.time() - start
+        logger.info(f"Inference for probe [{probe[:30]}...] took {elapsed:.6f} seconds and returned token {response.first_token}")
+        return elapsed, response.first_token
+
+    def load_probes(dataset_path):
+        """
+        Load probe examples from a JSON dataset. The JSON should contain a 'probe' column.
+        """
+        df = pd.read_json(dataset_path)
+        if "probe" not in df.columns:
+            raise ValueError("Dataset does not have a 'probe' column.")
+        return df["probe"].tolist()
 
     def read(self, key, seq=0, suppress=False):
         msg = build_message(NETCACHE_READ_QUERY, key, seq)
@@ -101,7 +182,7 @@ class NetCacheClient:
 
         start_time = time.time()
 
-        self.udps.connect((self.get_node(key), self.port))
+        self.udps.connect(('10.0.0.1', self.port))
         self.udps.send(msg)
 
         data = self.udps.recv(1024)
@@ -109,9 +190,6 @@ class NetCacheClient:
 
         latency = time.time() - start_time
         self.latencies.append(latency)
-
-        if suppress:
-            return
 
         if op == NETCACHE_KEY_NOT_FOUND:
             print('Error: Key not found (key = ' + key + ')')

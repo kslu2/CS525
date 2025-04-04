@@ -5,7 +5,7 @@ def main(n_servers, no_cache):
     client = NetCacheClient(n_servers=n_servers, no_cache=no_cache)
 
     # those queries should be replied by the server
-    client.read("times")
+    client.send_system_prompt()
 
 
 

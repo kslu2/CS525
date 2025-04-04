@@ -49,7 +49,7 @@ def precompute_system_prompt_kv_cache():
 		
 		system_prompt_cache = sp_outputs.past_key_values
 
-	return serialize_kv_cache(system_prompt_cache), input_ids.shape[1]
+	return system_prompt_cache, input_ids.shape[1]
 
 def run_inference(stub, probe, use_kv_cache=False, kv_cache_bytes=None, prompt_len=-1):
 	"""
@@ -83,7 +83,11 @@ def main():
 	stub = kv_cache_pb2_grpc.KVCacheServiceStub(channel)
 
 	# Precompute the system prompt's kv cache.
-	kv_cache_bytes, prompt_len = precompute_system_prompt_kv_cache()
+	kv_cache, prompt_len = precompute_system_prompt_kv_cache()
+
+	# 0 = key, 1 = value, ... 0 = 12 layers 6 bytes needed for key
+	print(kv_cache[0][0][0][0][0])
+	kv_cache_bytes = serialize_kv_cache(kv_cache)
 	logger.info("Precomputed system prompt kv cache.")
 
 	# Load probe examples from the dataset.

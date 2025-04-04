@@ -29,7 +29,7 @@
 #define NETCACHE_KEY_WIDTH 128
 
 /* recirculation */
-#define RECIRCULATION_COUNT 8
+#define RECIRCULATION_COUNT 4
 
 /* special reserved port for NetCache */
 const bit<16> NETCACHE_PORT = 50000;
@@ -44,6 +44,7 @@ const bit<8> WRITE_QUERY = 0x01;
 const bit<8> FLUSH_QUERY = 0x02;
 const bit<8> READ_QUERY = 0x00;
 const bit<8> FLUSH_COMPLETE = 0x05;
+const bit<8> INIT_QUERY = 0x06;
 
 /* netcache header field types */
 typedef bit<NETCACHE_KEY_WIDTH> key_t;
@@ -161,7 +162,6 @@ header netcache_t {
 	bit<32> seq;
 	key_t  key;
 	value_t value;
-    value_t value2;
 }
 
 struct fwd_metadata_t {
