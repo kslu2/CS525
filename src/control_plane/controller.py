@@ -7,6 +7,7 @@ import threading
 import struct
 import random
 import socket
+import time
 
 
 # P4 SWITCH ACTION TABLE NAMES DEFINITIONS
@@ -61,9 +62,6 @@ class NCacheController(object):
         # as 0 bits and occupied slots as 1 bits
         self.mem_pool = [0] * VTABLE_ENTRIES
 
-        # number of memory slots used (useful for lfu eviction policy)
-        self.used_mem_slots = 0
-
         # dictionary storing the value table index, bitmap and counter/validity
         # register index in the P4 switch that corresponds to each key
         self.key_map = {}
@@ -104,7 +102,7 @@ class NCacheController(object):
     # and the cached items by implementing the First Fit algorithm described in
     # Memory Management section of 4.4.2 (netcache paper)
     def first_fit(self, key, value_size):
-        n_slots = (value_size / (VTABLE_SLOT_SIZE))
+        n_slots = 32
         if value_size <= 0:
             return None
         if key in self.key_map:
@@ -112,6 +110,7 @@ class NCacheController(object):
 
         total_cnt = 0
         first_idx = -1
+        used_idx = []
         for idx in range(len(self.mem_pool)):
             old_bitmap = self.mem_pool[idx]
             n_zeros = self.vtables_num - bin(old_bitmap).count("1")
@@ -124,9 +123,9 @@ class NCacheController(object):
                         cnt += 1
                     
                 self.mem_pool[idx] = old_bitmap | 0b11111111
-                self.used_mem_slots += bin(0b11111111).count("1")
                 if first_idx == -1:
                     first_idx = idx
+                used_idx.append(idx)
             total_cnt += cnt
             if total_cnt == n_slots:
                 return first_idx
@@ -199,8 +198,7 @@ class NCacheController(object):
         # inform the server about the successful cache insertion
         if cont:
             self.inform_server()
-
-        print(f"Inserted key-value pair to cache: ({str(key)}, {str(value)})")
+        print(f"Inserted key-value pair to cache: ({str(key)})")
 
 
     # converts a string to a bytes representation and afterwards returns
@@ -222,8 +220,7 @@ class NCacheController(object):
             raise ValueError("Expected input to be either string or bytes")
 
         # Return the integer representation of the packed bytearray
-        return struct.unpack(">Q", bytearr)[0]
-
+        return struct.unpack(">q", bytearr)[0]
 
 
     # given an arbitrary sized integer, the max width (in bits) of the integer
@@ -271,7 +268,6 @@ class NCacheController(object):
 
             # deallocate space from memory pool
             self.mem_pool[vt_idx] = self.mem_pool[vt_idx] ^ bitmap
-            self.used_mem_slots = self.used_mem_slots - bin(bitmap).count("1")
 
             # free the id used to index the validity/counter register and append
             # it back to the id pool of the controller
@@ -286,7 +282,7 @@ class NCacheController(object):
     # its netcache header and manipulates cache based on the operation field
     # of the netcache header (callback function)
     def recv_switch_updates(self, pkt):
-        print("Received message from switch")
+        #print("Received message from switch")
 
         # extract netcache header information
         if pkt.haslayer(UDP):
@@ -300,7 +296,7 @@ class NCacheController(object):
         op = ncache_header.op
 
         if op == NETCACHE_WRITE_QUERY:
-            print("Received write for key = " + str(key) + " and value = " + str(value))
+            #print("Received write for key = " + str(key))
             self.insert(key, value)
 
         elif op == NETCACHE_FLUSH_QUERY:

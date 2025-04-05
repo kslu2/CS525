@@ -1,9 +1,8 @@
-value = 907507751940624169017
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# Convert integer to bytes (big-endian, 8 bytes)
-value_bytes = value.to_bytes(10, byteorder='big')
+model_name = "gpt2"
+cache_dir = "./gpt2_local"
 
-# Decode bytes as UTF-8 string
-decoded_str = value_bytes.decode('utf-8')
-
-print(decoded_str)
+# Downloads to ./gpt2_local (instead of default hidden cache)
+tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=cache_dir)
+model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir)

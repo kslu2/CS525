@@ -185,18 +185,20 @@ class NetCacheClient:
         self.udps.connect(('10.0.0.1', self.port))
         self.udps.send(msg)
 
-        data = self.udps.recv(1024)
-        op = data[0]
-
         latency = time.time() - start_time
         self.latencies.append(latency)
+        #if op == NETCACHE_KEY_NOT_FOUND:
+        #    print('Error: Key not found (key = ' + key + ')')
+        #else:
+        #    val = data[21:].decode("utf-8")
+        #    print(val)
 
-        if op == NETCACHE_KEY_NOT_FOUND:
-            print('Error: Key not found (key = ' + key + ')')
-        else:
-            val = data[21:].decode("utf-8")
-            print(val)
-
+    def request_latency_metric(self):
+        total_latency = 0
+        for i in self.latencies:
+            total_latency += i
+        average_latency = total_latency / len(self.latencies)
+        print(f"Average Latency of sending message: {average_latency}")
 
     def flush(self, seq = 0):
         msg = build_message(NETCACHE_FLUSH_QUERY, seq)

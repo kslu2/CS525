@@ -84,9 +84,11 @@ def main():
 
 	# Precompute the system prompt's kv cache.
 	kv_cache, prompt_len = precompute_system_prompt_kv_cache()
+	print(type(kv_cache))
 
+	torch.save(kv_cache, 'kv_cache.pt')
 	# 0 = key, 1 = value, ... 0 = 12 layers 6 bytes needed for key
-	print(kv_cache[0][0][0][0][0])
+
 	kv_cache_bytes = serialize_kv_cache(kv_cache)
 	logger.info("Precomputed system prompt kv cache.")
 
