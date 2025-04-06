@@ -26,6 +26,7 @@ NETCACHE_KEY_NOT_FOUND = 20
 
 NETCACHE_VALUE_SIZE = 256
 
+SYSTEM_PROMPT = "You are a helpful and informative AI assistant."
 INPUT_PROMPT = "How does the concept of quantum entanglement reconcile with the theory of relativity, given that entangled particles appear to influence each other instantaneously across vast distances?"
 
 def convert(val):
@@ -237,6 +238,9 @@ class KVServer:
 
                 if self.success_count == 2592:
                     self.compute_inference(INPUT_PROMPT, 9)
+                    self.baseline_inference(INPUT_PROMPT)
+                elif self.success_count % 100 == 0:
+                    print(f"Received {self.success_count} read success")
                 #msg = build_message(NETCACHE_REQUEST_SUCCESS, key_s, seq, value)
                 #self.udpss.sendto(msg, addr)
 
@@ -285,6 +289,35 @@ class KVServer:
                 logging.info('Unsupported query type received from client '
                         + addr[0] + ":" + str(addr[1]))
 
+    def baseline_inference(self, probe):
+        """
+        Baseline inference: concatenate the fixed system prompt with the probe,
+        then run inference without any precomputed cache.
+        """
+        set_seed(42)
+
+        input_text = SYSTEM_PROMPT + probe
+        encoded_full = tokenizer(input_text, return_tensors="pt", add_special_tokens=True)
+
+        input_ids = encoded_full.input_ids.to(device)
+        attention_mask = encoded_full.attention_mask.to(device)
+            
+        start = time.time()
+        
+        with torch.no_grad():
+            output_ids = model.generate(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            max_new_tokens=20,
+            pad_token_id=tokenizer.eos_token_id,
+            do_sample=False
+        )
+        
+        elapsed = time.time() - start
+        first_token = tokenizer.decode(output_ids[0, -1], skip_special_tokens=True)
+
+        print(f"Baseline inference time: {elapsed:.6f} seconds, with first token: {first_token}")
+    
     def compute_inference(self, input_prompt, prompt_len):
         """
         KV Cache inference: use the provided serialized kv cache for the system prompt,
