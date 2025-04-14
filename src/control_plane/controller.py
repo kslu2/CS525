@@ -151,8 +151,8 @@ class NCacheController(object):
         # store the value of the key in the vtables of the switch while
         # incrementally storing a part of the value at each value table
         # if the correspoding bit of the bitmap is set
-        for j in range(2):
-            for i in range(self.vtables_num):
+        for i in range(self.vtables_num):
+            for j in range(2):
                 partial_val = value[cnt:cnt+VTABLE_SLOT_SIZE]
                 self.controller.register_write(VTABLE_NAME_PREFIX + str(i),
                         vt_index + j, self.str_to_int(partial_val))
@@ -182,7 +182,7 @@ class NCacheController(object):
         # inform the server about the successful cache insertion
         if cont:
             self.inform_server()
-        print(f"Inserted key-value pair to cache: ({str(key)}, {str(value)}) ")
+        print(f"Inserted key-value pair to cache: ({str(key[8:])}, {str(value)}) ")
 
 
     # converts a string to a bytes representation and afterwards returns
@@ -298,10 +298,16 @@ class NCacheController(object):
         cpu_port_intf = str(self.topo.get_cpu_port_intf(self.sw_name))
         sniff(iface=cpu_port_intf, prn=self.recv_switch_updates, filter="port 50000")
 
+    def dummy_populate_vtables(self):
+        test_keys_l = "0000000012345678"
+        test_values_l = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666"
+        self.insert(test_keys_l, test_values_l, False)
+
 
     def main(self):
         self.set_forwarding_table()
         self.set_value_tables()
+        self.dummy_populate_vtables()
         self.hot_reports_loop()
 
 

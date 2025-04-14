@@ -48,6 +48,7 @@ class NetCacheClient:
 
     def __init__(self, n_servers=1, no_cache=False):
         self.n_servers = n_servers
+        self.successful_reads = 0
         self.servers = []
 
         if no_cache:
@@ -194,7 +195,8 @@ class NetCacheClient:
             print('Error: Key not found (key = ' + key + ')')
         else:
             val = data[21:].decode("utf-8")
-            print(val)
+            #print(val)
+            self.successful_reads += 1
 
     def request_latency_metric(self):
         total_latency = 0

@@ -32,13 +32,6 @@
       "module_name": "p4utils.mininetlib.net",
       "object_name": "P4Mininet"
     },
-    "exec_scripts": 
-    [
-      {
-        "cmd": "/home/kslu2/CS525/src/p4/init_requirements.sh",
-        "reboot_run": true
-      }
-    ],
     "topology": {
       "assignment_strategy" : "l2",
       "links": [

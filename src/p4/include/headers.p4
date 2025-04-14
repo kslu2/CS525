@@ -9,7 +9,7 @@
 #define EGRESS_VTABLE_NUM 8 // CHANGE THIS
 #define NETCACHE_VTABLE_NUM 16
 #define NETCACHE_VTABLE_SIZE_WIDTH 16
-#define NETCACHE_VTABLE_SLOT_WIDTH 64    // in bits
+#define NETCACHE_VTABLE_SLOT_WIDTH 64   // in bits
 
 
 /* minpow2(NETCACHE_ENTRIES * NETCACHE_VTABLE_NUM) */
@@ -21,7 +21,7 @@
 #define NETCACHE_KEY_WIDTH 128
 
 /* recirculation */
-#define RECIRCULATION_COUNT 2
+#define RECIRCULATION_COUNT 1
 
 /* special reserved port for NetCache */
 const bit<16> NETCACHE_PORT = 50000;
