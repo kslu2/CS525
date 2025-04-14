@@ -5,16 +5,8 @@ def main(n_servers, no_cache):
     client = NetCacheClient(n_servers=n_servers, no_cache=no_cache)
 
     # those queries should be replied by the server
-    """
-    for i in range(12):
-        for j in range(2):
-            for k in range(12):
-                for p in range(9):
-                    custom_key = f"{i:02}{j}{k:02}{p}"
-                    client.read(custom_key)
-                    time.sleep(0.005)
-    """
-    client.send_system_prompt()
+    print(time.time())
+    client.read('hehexd1')
 
 
 

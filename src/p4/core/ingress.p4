@@ -14,10 +14,6 @@
 #define pkt_instance_type_resubmit 6
 #define RECIRCULATION_PORT 2
 
-#define pkt_is_mirrored \
-	((standard_metadata.instance_type != pkt_instance_type_normal) && \
-	 (standard_metadata.instance_type != pkt_instance_type_replication))
-
 #define pkt_is_not_mirrored \
 	 ((standard_metadata.instance_type == pkt_instance_type_normal) || \
 	  (standard_metadata.instance_type == pkt_instance_type_replication))
@@ -35,12 +31,6 @@ control MyIngress(inout headers hdr,
 	action set_egress_port(egressSpec_t port) {
 		standard_metadata.egress_spec = port;
 	}
-
-	action update_recirculate_processing_count_by_num(in bit<8> ingress_num) {
-        // This field indicates how many times the packet goes through the ingress pipeline
-        meta.recirc_cnt = meta.recirc_cnt + ingress_num;
-    }
-
 
 	/* Simple l2 forwarding logic */
 	table l2_forward {
@@ -95,25 +85,25 @@ control MyIngress(inout headers hdr,
 
 
 	/* store metadata for a given key to find its values and index it properly */
-	action set_lookup_metadata(vtableBitmap_t vt_bitmap, vtableIdx_t vt_idx, keyIdx_t key_idx) {
+	action ingress_set_lookup_metadata(vtableBitmap_t vt_bitmap, vtableIdx_t vt_idx, keyIdx_t key_idx) {
 		meta.vt_bitmap = vt_bitmap;
 		meta.vt_idx = vt_idx;
 		meta.key_idx = key_idx;
 	}
 
 	/* define cache lookup table */
-	table lookup_table {
+	table ingress_lookup_table {
 
 		key = {
 			hdr.netcache.key : exact;
 		}
 
 		actions = {
-			set_lookup_metadata;
+			ingress_set_lookup_metadata;
 			NoAction;
 		}
 
-		size = NETCACHE_ENTRIES * NETCACHE_VTABLE_NUM;
+		size = NETCACHE_ENTRIES * INGRESS_VTABLE_NUM;
 		default_action = NoAction;
 
 	}
@@ -121,7 +111,7 @@ control MyIngress(inout headers hdr,
 
     // register storing a bit to indicate whether an element in the cache
     // is valid or invalid
-    register<bit<1>>(NETCACHE_ENTRIES * NETCACHE_VTABLE_NUM) cache_status;
+    register<bit<1>>(NETCACHE_ENTRIES * INGRESS_VTABLE_NUM) ingress_cache_status;
 
 	// maintain 8 value tables since we need to spread them across stages
 	// where part of the value is created from each stage (4.4.2 section)
@@ -134,11 +124,6 @@ control MyIngress(inout headers hdr,
 	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt6;
 	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt7;
 
-
-	// count how many stages actually got triggered (1s on bitmap)
-	// this variable is needed for the shifting logic
-	bit<8> valid_stages_num = 0;
-
 	action process_array_0() {
 		// store value of the array at this stage
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> curr_stage_val;
@@ -146,11 +131,8 @@ control MyIngress(inout headers hdr,
 		if (meta.recirc_cnt > 0x00000000) {
 			hdr.netcache.value = meta.temp_value;
 			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
-		} else {
-			hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value;
 		}
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 
@@ -159,7 +141,6 @@ control MyIngress(inout headers hdr,
 		vt1.read(curr_stage_val, (bit<32>) meta.vt_idx);
 		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_2() {
@@ -168,7 +149,6 @@ control MyIngress(inout headers hdr,
 
 		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_3() {
@@ -177,7 +157,6 @@ control MyIngress(inout headers hdr,
 
 		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_4() {
@@ -186,7 +165,6 @@ control MyIngress(inout headers hdr,
 
 		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_5() {
@@ -195,7 +173,6 @@ control MyIngress(inout headers hdr,
 
 		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_6() {
@@ -204,7 +181,6 @@ control MyIngress(inout headers hdr,
 
 		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 	action process_array_7() {
@@ -213,7 +189,6 @@ control MyIngress(inout headers hdr,
 
 		hdr.netcache.value = (bit<NETCACHE_VALUE_WIDTH_MAX>) hdr.netcache.value << 64;
 		hdr.netcache.value = hdr.netcache.value | (bit<NETCACHE_VALUE_WIDTH_MAX>) curr_stage_val;
-		valid_stages_num = valid_stages_num + 1;
 	}
 
 
@@ -320,14 +295,14 @@ control MyIngress(inout headers hdr,
 		if (hdr.netcache.isValid()) {
 
 
-            switch(lookup_table.apply().action_run) {
+            switch(ingress_lookup_table.apply().action_run) {
 
-				set_lookup_metadata: {
+				ingress_set_lookup_metadata: {
 
                     if (hdr.netcache.op == READ_QUERY){
 
 						bit<1> cache_valid_bit;
-						cache_status.read(cache_valid_bit, (bit<32>) meta.key_idx);
+						ingress_cache_status.read(cache_valid_bit, (bit<32>) meta.key_idx);
 
 						// read query should be answered by switch if the key
 						// resides in cache and its entry is valid
@@ -340,13 +315,12 @@ control MyIngress(inout headers hdr,
 							vtable_4.apply(); vtable_5.apply(); vtable_6.apply(); vtable_7.apply();
 						}
 
-						update_recirculate_processing_count_by_num(0x00000001);
-						if (meta.recirc_cnt < RECIRCULATION_COUNT) {
+						if (meta.recirc_cnt < RECIRCULATION_COUNT - 1) {
 							standard_metadata.instance_type = pkt_instance_type_ingress_recirc;
-							meta.temp_value = hdr.netcache.value;
 							set_egress_port_recirculation();
 						} else {
 							standard_metadata.instance_type = pkt_instance_type_normal;
+							ret_pkt_to_sender();
 						}
                     }
 				}

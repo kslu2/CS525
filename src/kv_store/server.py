@@ -108,6 +108,7 @@ class KVServer:
         tensor = torch.zeros(1, 12, 9, 64)
         inner_tuple = (tensor.clone(), tensor.clone())
         self.kv_vectors = tuple((inner_tuple[0].clone(), inner_tuple[1].clone()) for _ in range(12))
+        self.total_time = 0
 
     def activate(self):
 
@@ -189,12 +190,9 @@ class KVServer:
                     print('[{}] Received READ_FAIL({}) from client {}'.format(self.name, key, addr[0]))
 
                 #simulate operation
-                op_res = 'hehexd'
+                op_res = 'aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666'
 
                 msg = build_message(NETCACHE_WRITE_QUERY, key_s, seq, op_res)
-                self.udpss.sendto(msg, addr)
-
-                msg = build_message(NETCACHE_REQUEST_SUCCESS, key_s, seq, op_res)
                 self.udpss.sendto(msg, addr)
 
             elif op == NETCACHE_INIT_QUERY:
@@ -207,6 +205,7 @@ class KVServer:
                 
                 kv_cache = torch.load(self.cache)
                 prompt_len = 9
+                self.total_time = 0
                 for i in range(12):
                     for j in range(2):
                         for k in range(12):
@@ -216,27 +215,27 @@ class KVServer:
                                 msg = build_write_message(NETCACHE_WRITE_QUERY, custom_key, res, seq)
                                 self.udpss.sendto(msg, addr)
                                 time.sleep(0.05)
-                time.sleep(10)
+                
                 msg = build_message(NETCACHE_REQUEST_SUCCESS, key_s, seq, "Prompt written to KV Cache")
                 self.udpss.sendto(msg, addr)
 
 
             elif op == NETCACHE_READ_QUERY:
-                value = unpack_message_to_tensor(value)
-                #logging.info('Received READ_SUCCESS(' + key + ') from client ' + addr[0])
-
-                #if not self.suppress:
-                #    print('[{}] Received READ_SUCCESS({}) from client {}'.format(self.name, key, addr[0]))
+                self.total_time += float(time.time())
                 self.success_count += 1
+                value = unpack_message_to_tensor(value)
+                logging.info('Received READ_SUCCESS(' + str(self.total_time) + ') from client ' + addr[0] + ' success rate ' + str(self.success_count))
 
+                if not self.suppress:
+                    print('[{}] Received READ_SUCCESS({}) from client {} success rate {}'.format(self.name, str(self.total_time), addr[0], str(self.success_count)))
                 layer = int(key[0:2])
                 kv_toggle = int(key[2])
                 head = int(key[3:5])
                 pos = int(key[5])
                 self.kv_vectors[layer][kv_toggle][0][head][pos] = value
 
-                if self.success_count == 2592:
-                    self.compute_inference(INPUT_PROMPT, 9)
+                #if self.success_count == 2592:
+                    #self.compute_inference(INPUT_PROMPT, 9)
                 #msg = build_message(NETCACHE_REQUEST_SUCCESS, key_s, seq, value)
                 #self.udpss.sendto(msg, addr)
 

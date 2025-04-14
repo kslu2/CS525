@@ -1,21 +1,13 @@
 #ifndef HEADERS_P4
 #define HEADERS_P4
 
-
-#define BLOOM_FILTER_ENTRIES 4096
-#define BLOOM_IDX_WIDTH 12
-
-
-#define SKETCH_BUCKET_LENGTH 65535
-#define SKETCH_CELL_BIT_WIDTH 16
-#define SKETCH_IDX_WIDTH 16
-
-
 /* netcache size */
 #define NETCACHE_ENTRIES 65536
 
 /* netcache value table constant definitions */
-#define NETCACHE_VTABLE_NUM 8
+#define INGRESS_VTABLE_NUM 8 // CHANGE THIS
+#define EGRESS_VTABLE_NUM 8 // CHANGE THIS
+#define NETCACHE_VTABLE_NUM 16
 #define NETCACHE_VTABLE_SIZE_WIDTH 16
 #define NETCACHE_VTABLE_SLOT_WIDTH 64    // in bits
 
@@ -29,7 +21,7 @@
 #define NETCACHE_KEY_WIDTH 128
 
 /* recirculation */
-#define RECIRCULATION_COUNT 4
+#define RECIRCULATION_COUNT 2
 
 /* special reserved port for NetCache */
 const bit<16> NETCACHE_PORT = 50000;
@@ -164,27 +156,11 @@ header netcache_t {
 	value_t value;
 }
 
-struct fwd_metadata_t {
-    bit<32> l2ptr;
-    bit<24> out_bd;
-}
-
 struct metadata {
 	vtableBitmap_t vt_bitmap;
 	vtableIdx_t vt_idx;
 
-	bit<BLOOM_IDX_WIDTH> bloom_idx1;
-	bit<BLOOM_IDX_WIDTH> bloom_idx2;
-	bit<BLOOM_IDX_WIDTH> bloom_idx3;
-
-	bit<SKETCH_CELL_BIT_WIDTH> key_cnt;
-
 	keyIdx_t key_idx;
-
-
-	bit<1> hot_query;
-
-    fwd_metadata_t fwd_metadata;
 
     bool cache_valid;
 
