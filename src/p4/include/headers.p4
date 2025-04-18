@@ -21,7 +21,7 @@
 #define NETCACHE_KEY_WIDTH 128
 
 /* recirculation */
-#define RECIRCULATION_COUNT 1
+#define RECIRCULATION_COUNT 2
 
 /* special reserved port for NetCache */
 const bit<16> NETCACHE_PORT = 50000;
@@ -154,6 +154,7 @@ header netcache_t {
 	bit<32> seq;
 	key_t  key;
 	value_t value;
+    value_t value2;
 }
 
 struct metadata {
@@ -168,9 +169,6 @@ struct metadata {
 
     @field_list(1)
     bit<8> recirc_cnt;
-
-    @field_list(1)
-    value_t temp_value;
 }
 
 struct headers {

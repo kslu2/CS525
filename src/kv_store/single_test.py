@@ -4,7 +4,7 @@ import time
 def main(n_servers, no_cache):
     client = NetCacheClient(n_servers=n_servers, no_cache=no_cache)
     key = "12345678"
-    client.read(key)
+    print(client.read(key))
 
 
 

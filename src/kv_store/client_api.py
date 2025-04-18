@@ -13,7 +13,7 @@ NETCACHE_READ_QUERY = 0
 NETCACHE_FLUSH_QUERY = 2
 NETCACHE_INIT_QUERY = 6
 
-NETCACHE_VALUE_SIZE = 256
+NETCACHE_VALUE_SIZE = 512
 
 NETCACHE_KEY_NOT_FOUND = 20
 
@@ -185,7 +185,7 @@ class NetCacheClient:
 
         self.udps.connect(('10.0.0.1', self.port))
         self.udps.send(msg)
-
+        
         data = self.udps.recv(1024)
         op = data[0]
 
@@ -197,6 +197,8 @@ class NetCacheClient:
             val = data[21:].decode("utf-8")
             #print(val)
             self.successful_reads += 1
+            return val
+        return None
 
     def request_latency_metric(self):
         total_latency = 0

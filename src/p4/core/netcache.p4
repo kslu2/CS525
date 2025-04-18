@@ -53,7 +53,9 @@ control MyComputeChecksum(inout headers hdr, inout metadata meta) {
                     hdr.netcache.op,
                     hdr.netcache.seq,
                     hdr.netcache.key,
-                    hdr.netcache.value },
+                    hdr.netcache.value,
+                    hdr.netcache.value2 
+                    },
                     hdr.udp.checksum,
                     HashAlgorithm.csum16);
 
@@ -86,7 +88,8 @@ control MyComputeChecksum(inout headers hdr, inout metadata meta) {
 				hdr.netcache.op,
 				hdr.netcache.seq,
 				hdr.netcache.key,
-				hdr.netcache.value
+				hdr.netcache.value,
+                hdr.netcache.value2
 			},
 			hdr.tcp.checksum,
 			HashAlgorithm.csum16);

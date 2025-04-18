@@ -20,6 +20,7 @@ VTABLE_SLOT_SIZE = 8   # in bytes
 VTABLE_ENTRIES = 65536
 
 CONTROLLER_MIRROR_SESSION = 100
+RECIRCULATION_COUNT = 2
 
 NETCACHE_READ_QUERY = 0
 NETCACHE_WRITE_QUERY = 1
@@ -34,7 +35,7 @@ CACHE_INSERT_COMPLETE = 'INSERT_OK'
 class NetcacheHeader(Packet):
     name = 'NcachePacket'
     fields_desc = [BitField('op', 0, 8), BitField('seq', 0, 32),
-            BitField('key', 0, 128), BitField('value', 0, NETCACHE_VALUE_SIZE)]
+            BitField('key', 0, 128), BitField('value', 0, NETCACHE_VALUE_SIZE), BitField('value2', 0, NETCACHE_VALUE_SIZE)]
 
 
 class NCacheController(object):
@@ -151,13 +152,14 @@ class NCacheController(object):
         # store the value of the key in the vtables of the switch while
         # incrementally storing a part of the value at each value table
         # if the correspoding bit of the bitmap is set
-        for i in range(self.vtables_num):
-            for j in range(2):
-                partial_val = value[cnt:cnt+VTABLE_SLOT_SIZE]
-                self.controller.register_write(VTABLE_NAME_PREFIX + str(i),
-                        vt_index + j, self.str_to_int(partial_val))
+        for h in range(0, RECIRCULATION_COUNT * 2, 2):
+            for i in range(self.vtables_num):
+                for j in range(2):
+                    partial_val = value[cnt:cnt+VTABLE_SLOT_SIZE]
+                    self.controller.register_write(VTABLE_NAME_PREFIX + str(i),
+                            vt_index + j + h, self.str_to_int(partial_val))
 
-                cnt += VTABLE_SLOT_SIZE
+                    cnt += VTABLE_SLOT_SIZE
 
         # allocate an id from the pool to index the counter and validity register
         # (we take the last element of list because in python list is implemented
@@ -300,15 +302,16 @@ class NCacheController(object):
 
     def dummy_populate_vtables(self):
         test_keys_l = "0000000012345678"
-        test_values_l = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666"
-        self.insert(test_keys_l, test_values_l, False)
+        test_values_512 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666666666665555555544444444333333332222222211111111zzzzzzzzyyyyyyyyxxxxxxxxwwwwwwwwvvvvvvvvuuuuuuuuttttttttssssssssrrrrrrrrqqqqqqqqppppppppoooooooonnnnnnnnmmmmmmmmllllllllkkkkkkkkjjjjjjjjiiiiiiiihhhhhhhhggggggggffffffffeeeeeeeeddddddddccccccccbbbbbbbbaaaaaaaa"
+        test_values_256 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666"
+        test_values_128 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnoooooooopppppppp"
+        self.insert(test_keys_l, test_values_512, False)
 
 
     def main(self):
         self.set_forwarding_table()
         self.set_value_tables()
         self.dummy_populate_vtables()
-        self.hot_reports_loop()
 
 
 if __name__ == "__main__":
