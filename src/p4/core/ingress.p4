@@ -133,12 +133,13 @@ control MyIngress(inout headers hdr,
 
 			vt0.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt0.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		}	
+		// 	vt0.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }	
 	}
 
 
@@ -150,12 +151,13 @@ control MyIngress(inout headers hdr,
 
 			vt1.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt1.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt1.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_2() {
@@ -166,12 +168,13 @@ control MyIngress(inout headers hdr,
 
 			vt2.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt2.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt2.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_3() {
@@ -182,12 +185,13 @@ control MyIngress(inout headers hdr,
 
 			vt3.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt3.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt3.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_4() {
@@ -198,12 +202,13 @@ control MyIngress(inout headers hdr,
 
 			vt4.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt4.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt4.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_5() {
@@ -214,12 +219,13 @@ control MyIngress(inout headers hdr,
 
 			vt5.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt5.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt5.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_6() {
@@ -230,12 +236,13 @@ control MyIngress(inout headers hdr,
 
 			vt6.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt6.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt6.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_7() {
@@ -246,12 +253,13 @@ control MyIngress(inout headers hdr,
 
 			vt7.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt7.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt7.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 
@@ -383,7 +391,6 @@ control MyIngress(inout headers hdr,
 							set_egress_port_recirculation();
 						} else {
 							standard_metadata.instance_type = pkt_instance_type_normal;
-							ret_pkt_to_sender();
 						}
                     }
 				}

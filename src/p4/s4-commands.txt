@@ -1,4 +1,4 @@
 table_set_default l2_forward drop
 table_add l2_forward set_egress_port 00:00:0a:00:01:01 => 1
 table_add l2_forward set_egress_port 00:00:00:02:01:00 => 2
-table_add l2_forward set_egress_port 00:00:0a:00:00:01 => 3
+table_add l2_forward set_egress_port 00:00:0a:00:00:04 => 3

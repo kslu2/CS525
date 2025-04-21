@@ -35,8 +35,8 @@
     "topology": {
       "assignment_strategy" : "l2",
       "links": [
-          ["server1", "s1"],
-          ["client1", "s1"]
+          ["client1", "s1"],
+          ["server1", "s1"]
       ],
       "hosts": {
           "server1": { },

@@ -20,7 +20,7 @@ VTABLE_SLOT_SIZE = 8   # in bytes
 VTABLE_ENTRIES = 65536
 
 CONTROLLER_MIRROR_SESSION = 100
-RECIRCULATION_COUNT = 2
+RECIRCULATION_COUNT = 1
 
 NETCACHE_READ_QUERY = 0
 NETCACHE_WRITE_QUERY = 1
@@ -305,7 +305,7 @@ class NCacheController(object):
         test_values_512 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666666666665555555544444444333333332222222211111111zzzzzzzzyyyyyyyyxxxxxxxxwwwwwwwwvvvvvvvvuuuuuuuuttttttttssssssssrrrrrrrrqqqqqqqqppppppppoooooooonnnnnnnnmmmmmmmmllllllllkkkkkkkkjjjjjjjjiiiiiiiihhhhhhhhggggggggffffffffeeeeeeeeddddddddccccccccbbbbbbbbaaaaaaaa"
         test_values_256 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666"
         test_values_128 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnoooooooopppppppp"
-        self.insert(test_keys_l, test_values_512, False)
+        self.insert(test_keys_l, test_values_256, False)
 
 
     def main(self):
@@ -315,4 +315,12 @@ class NCacheController(object):
 
 
 if __name__ == "__main__":
-    controller = NCacheController('s1').main()
+    controller1 = NCacheController('s1').main()
+    controller2 = NCacheController('s2').main()
+    controller3 = NCacheController('s3').main()
+    controller3 = NCacheController('s4').main()
+    controller3 = NCacheController('s5').main()
+    controller3 = NCacheController('s6').main()
+    controller3 = NCacheController('s7').main()
+    controller3 = NCacheController('s8').main()
+    controller3 = NCacheController('s9').main()

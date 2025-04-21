@@ -3,6 +3,7 @@ import time
 import sys
 import grpc
 import io
+import os
 
 NETCACHE_PORT = 50000
 NOCACHE_PORT = 50001
@@ -10,15 +11,12 @@ NOCACHE_PORT = 50001
 MAX_SUPPORTED_SERVERS = 254
 
 NETCACHE_READ_QUERY = 0
-NETCACHE_FLUSH_QUERY = 2
-NETCACHE_INIT_QUERY = 6
 
-NETCACHE_VALUE_SIZE = 512
+NETCACHE_VALUE_SIZE = 256
 
 NETCACHE_KEY_NOT_FOUND = 20
 
-SYSTEM_PROMPT = "You are a helpful and informative AI assistant."
-
+NUM_SWITCH = 9
 
 
 def convert(val):
@@ -47,7 +45,18 @@ def build_message(op, key = "", seq=0, value = ""):
 class NetCacheClient:
 
     def __init__(self, n_servers=1, no_cache=False):
+        os.system("for ip in $(arp -n | awk '{print $1}' | tail -n +2); do arp -d $ip; done")
+        os.system("arp -s 10.0.0.1 00:00:0a:00:00:01 -i client1-eth0")
+        os.system("arp -s 10.0.0.2 00:00:0a:00:00:02 -i client1-eth1")
+        os.system("arp -s 10.0.0.3 00:00:0a:00:00:03 -i client1-eth2")
+        os.system("arp -s 10.0.0.4 00:00:0a:00:00:04 -i client1-eth3")
+        os.system("arp -s 10.0.0.5 00:00:0a:00:00:05 -i client1-eth4")
+        os.system("arp -s 10.0.0.6 00:00:0a:00:00:06 -i client1-eth5")
+        os.system("arp -s 10.0.0.7 00:00:0a:00:00:07 -i client1-eth6")
+        os.system("arp -s 10.0.0.8 00:00:0a:00:00:08 -i client1-eth7")
+        os.system("arp -s 10.0.0.9 00:00:0a:00:00:09 -i client1-eth8")
         self.n_servers = n_servers
+        self.request_received = 0
         self.successful_reads = 0
         self.servers = []
 
@@ -56,135 +65,73 @@ class NetCacheClient:
         else:
             self.port = NETCACHE_PORT
 
-        self.udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.get_servers_ips()
+        self.sock_s1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s1.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth0')
+        
+        self.sock_s2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s2.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth1')
+
+        self.sock_s3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s3.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth2')
+
+        self.sock_s4 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s4.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth3')
+
+        self.sock_s5 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s5.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth4')
+
+        self.sock_s6 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s6.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth5')
+
+        self.sock_s7 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s7.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth6')
+
+        self.sock_s8 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s8.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth7')
+
+        self.sock_s9 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s9.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth8')
 
         # store all latencies of the requests sent (used for evaluation)
         self.latencies = []
 
-    def send_system_prompt(self, seq = 0):
-        msg = build_message(NETCACHE_INIT_QUERY, "init", seq, SYSTEM_PROMPT)
-        if msg is None:
-            return
-
-        start_time = time.time()
-        self.udps.connect(('10.0.0.1', self.port))
-        self.udps.send(msg)
-
-        data = self.udps.recv(1024)
-        op = data[0]
-
-        latency = time.time() - start_time
-        self.latencies.append(latency)
-
-        if op == NETCACHE_KEY_NOT_FOUND:
-            print('Error: Key not found (key = ' + key + ')')
-        else:
-            val = data[21:].decode("utf-8")
-            print(val)
-
-    def configure(self):
-
-        # Load probe examples from the dataset.
-        dataset_path = "hf://datasets/Naomibas/llm-system-prompts-benchmark/hundred_system_prompts.json"
-        probes = load_probes(dataset_path)
-        logger.info(f"Loaded {len(probes)} probes from dataset.")
-
-        baseline_times = []
-        kv_cache_times = []
-
-        # Loop over the probes and measure inference time for both experiments.
-        for probe in probes[:1]:
-            # Baseline experiment: without kv cache.
-            t_baseline, token_baseline = run_inference(stub, probe, use_kv_cache=False)
-            baseline_times.append(t_baseline)
-
-            # KV Cache experiment: send the precomputed system prompt kv cache.
-            t_kv, token_kv = run_inference(stub, probe, use_kv_cache=True, kv_cache_bytes=kv_cache_bytes, prompt_len=prompt_len)
-            kv_cache_times.append(t_kv)
-
-        avg_baseline = sum(baseline_times) / len(baseline_times)
-        avg_kv_cache = sum(kv_cache_times) / len(kv_cache_times)
-        speedup = avg_baseline / avg_kv_cache if avg_kv_cache > 0 else float('inf')
-
-        print("\n=== Experiment Results ===")
-        print(f"Baseline average time to first token: {avg_baseline:.6f} seconds")
-        print(f"KV Cache average time to first token: {avg_kv_cache:.6f} seconds")
-        print(f"Speedup factor: {speedup:.2f}x")
-
-
-    # the IP addresses assigned to servers are based on the assignment
-    # strategy defined at the p4app.json file; the basic l2 strategy
-    # that we are using assigns IP addresses starting from 10.0.0.1
-    # and assigns incrementing addresses to defined hosts
-    def get_servers_ips(self):
-        if self.n_servers > MAX_SUPPORTED_SERVERS:
-            print("Error: Exceeded maximum supported servers")
-            sys.exit()
-
-        for i in range(self.n_servers):
-            self.servers.append("10.0.0." + str(i+1))
-
-    # return the right node who contains the given key - our implementation
-    # is based on client side partitioning i.e the client directly sends
-    # the message to the correct node
-    # TODO:1(dimlek): implement consistent hashing partitioning
-    # TODO:2(dimlek): explore option of proxy assisted partitioning
-    def get_node(self, key, partition_scheme='range'):
-
-        if partition_scheme == 'range':
-            # find the right node through range partitioning based on 1st key character
-            first_letter = ord(key[0])
-            return self.servers[first_letter % self.n_servers]
-
-        elif partition_scheme == 'hash':
-            return self.servers[hash(key) % self.n_servers]
-
-        elif partition_scheme == 'consistent-hash':
-            # TODO(dimlek): impelement consistent hashing partitioning
-            pass
-
-        else:
-            print("Error: Invalid partitioning scheme")
-            sys.exit()
-
-        return -1
-
-    def run_inference(stub, probe, use_kv_cache=False, kv_cache_bytes=None, prompt_len=-1):
-        """
-        Make an inference RPC call. If use_kv_cache is True and kv_cache_bytes is provided,
-        include it in the request.
-        """
-        request = kv_cache_pb2.InferenceRequest(input=SYSTEM_PROMPT + probe) 
-
-        if use_kv_cache and kv_cache_bytes is not None:
-            request.kv_cache = kv_cache_bytes
-            request.prompt_len = prompt_len
-
-        start = time.time()
-        response = stub.Inference(request)
-        elapsed = time.time() - start
-        logger.info(f"Inference for probe [{probe[:30]}...] took {elapsed:.6f} seconds and returned token {response.first_token}")
-        return elapsed, response.first_token
-
-    def load_probes(dataset_path):
-        """
-        Load probe examples from a JSON dataset. The JSON should contain a 'probe' column.
-        """
-        df = pd.read_json(dataset_path)
-        if "probe" not in df.columns:
-            raise ValueError("Dataset does not have a 'probe' column.")
-        return df["probe"].tolist()
-
     def read(self, key, seq=0, suppress=False):
+        self.request_received += 1
         msg = build_message(NETCACHE_READ_QUERY, key, seq)
         if msg is None:
             return
 
-        start_time = time.time()
+        if self.request_received % NUM_SWITCH == 0:
+            sock = self.sock_s1
+            sock.sendto(msg, ("10.0.0.1", self.port))
+        elif self.request_received % NUM_SWITCH == 1:
+            sock = self.sock_s2
+            sock.sendto(msg, ("10.0.0.2", self.port))
+        elif self.request_received % NUM_SWITCH == 2:
+            sock = self.sock_s3
+            sock.sendto(msg, ("10.0.0.3", self.port))
+        elif self.request_received % NUM_SWITCH == 3:
+            sock = self.sock_s4
+            sock.sendto(msg, ("10.0.0.4", self.port))
+        elif self.request_received % NUM_SWITCH == 4:
+            sock = self.sock_s5
+            sock.sendto(msg, ("10.0.0.5", self.port))
+        elif self.request_received % NUM_SWITCH == 5:
+            sock = self.sock_s6
+            sock.sendto(msg, ("10.0.0.6", self.port))
+        elif self.request_received % NUM_SWITCH == 6:
+            sock = self.sock_s7
+            sock.sendto(msg, ("10.0.0.7", self.port))
+        elif self.request_received % NUM_SWITCH == 7:
+            sock = self.sock_s8
+            sock.sendto(msg, ("10.0.0.8", self.port))
+        elif self.request_received % NUM_SWITCH == 8:
+            sock = self.sock_s9
+            sock.sendto(msg, ("10.0.0.9", self.port))
+            time.sleep(0.001)
 
-        self.udps.connect(('10.0.0.1', self.port))
-        self.udps.send(msg)
+
+        '''
         
         data = self.udps.recv(1024)
         op = data[0]
@@ -198,6 +145,7 @@ class NetCacheClient:
             #print(val)
             self.successful_reads += 1
             return val
+        '''
         return None
 
     def request_latency_metric(self):
@@ -206,21 +154,3 @@ class NetCacheClient:
             total_latency += i
         average_latency = total_latency / len(self.latencies)
         print(f"Average Latency of sending message: {average_latency}")
-
-    def flush(self, seq = 0):
-        msg = build_message(NETCACHE_FLUSH_QUERY, seq)
-        if msg is None:
-            return
-
-        self.udps.connect((self.get_node(key), self.port))
-        self.udps.send(msg)
-
-        start_time = time.time()
-
-        data = self.udps.recv(1024)
-        op = data[0]
-
-        latency = time.time() - start_time
-        self.latencies.append(latency)
-
-        print(f"Received Flush Complete {op}")

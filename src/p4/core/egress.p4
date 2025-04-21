@@ -68,12 +68,13 @@ control MyEgress(inout headers hdr,
 
 			vt8.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt8.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt8.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_9() {
@@ -84,12 +85,13 @@ control MyEgress(inout headers hdr,
 
 			vt9.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt9.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt9.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_10() {
@@ -100,12 +102,13 @@ control MyEgress(inout headers hdr,
 
 			vt10.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt10.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt10.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_11() {
@@ -116,12 +119,13 @@ control MyEgress(inout headers hdr,
 
 			vt11.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt11.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt11.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_12() {
@@ -132,12 +136,13 @@ control MyEgress(inout headers hdr,
 
 			vt12.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt12.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt12.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_13() {
@@ -148,12 +153,13 @@ control MyEgress(inout headers hdr,
 
 			vt13.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt13.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt13.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_14() {
@@ -164,12 +170,13 @@ control MyEgress(inout headers hdr,
 
 			vt14.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt14.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt14.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	action process_array_15() {
@@ -180,12 +187,13 @@ control MyEgress(inout headers hdr,
 
 			vt15.read(val, (bit<32>) meta.vt_idx + 1);
 			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		} else {
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-			vt15.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
+		//  else {
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+		// 	vt15.read(val, (bit<32>) meta.vt_idx + 1);
+		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+		// }
 	}
 
 	table vtable_8 {
