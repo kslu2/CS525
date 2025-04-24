@@ -56,8 +56,8 @@ class NetCacheClient:
         else:
             self.port = NETCACHE_PORT
 
-        self.udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.get_servers_ips()
+        self.sock_s1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock_s1.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth0')
 
         # store all latencies of the requests sent (used for evaluation)
         self.latencies = []
@@ -181,10 +181,11 @@ class NetCacheClient:
         if msg is None:
             return
 
-        start_time = time.time()
+        sock = self.sock_s1
+        sock.sendto(msg, ("10.0.0.1", self.port))
 
-        self.udps.connect(('10.0.0.1', self.port))
-        self.udps.send(msg)
+
+        '''
         
         data = self.udps.recv(1024)
         op = data[0]

@@ -78,11 +78,11 @@ def set_seed(seed=42):
 
 class KVServer:
 
-    def __init__(self, host, cache, nocache=False, suppress=False, max_listen=10):
+    def __init__(self, host, nocache=False, suppress=False, max_listen=10):
         # server ip address
-        self.host = host
-        # server name
-        self.name = 'server' + self.host.split('.')[-1]
+        self.host1 = '0.0.0.0'
+
+        self.name = 'server1'
 
         # port server is listening to
         if nocache:
@@ -105,10 +105,6 @@ class KVServer:
         # (used for cache coherency purposes)
         self.unixss = None
 
-        self.cache = cache
-        tensor = torch.zeros(1, 12, 9, 64)
-        inner_tuple = (tensor.clone(), tensor.clone())
-        self.kv_vectors = tuple((inner_tuple[0].clone(), inner_tuple[1].clone()) for _ in range(12))
         self.total_time = 0
 
     def activate(self):
@@ -121,24 +117,12 @@ class KVServer:
                 datefmt='%d-%m-%Y %H:%M:%S')
 
         # create udp socket server
-        self.udpss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udpss.bind((self.host, self.port))
-
-        # create tcp socket server
-        self.tcpss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.tcpss.bind((self.host, self.port))
-        self.tcpss.listen(1)
+        self.udpss1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.udpss1.bind((self.host1, self.port))
 
         # spawn new thread that serves incoming udp (read) queries
-        server_udp_t = threading.Thread(target=self.handle_client_udp_request)
-        server_udp_t.start()
-
-        # spawn new thread that serves incoming tcp (put/delete) queries
-        server_tcp_t = threading.Thread(target=self.handle_client_tcp_request)
-        server_tcp_t.start()
-
-        # self.periodic_request_report()
-
+        server_udp_t1 = threading.Thread(target=self.handle_client_udp_request, args=(self.udpss1, ))
+        server_udp_t1.start()
         # starting time of serving requests (used for throughput calculation)
         self.start_time = time.time()
 
