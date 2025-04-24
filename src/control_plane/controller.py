@@ -316,11 +316,3 @@ class NCacheController(object):
 
 if __name__ == "__main__":
     controller1 = NCacheController('s1').main()
-    controller2 = NCacheController('s2').main()
-    controller3 = NCacheController('s3').main()
-    controller3 = NCacheController('s4').main()
-    controller3 = NCacheController('s5').main()
-    controller3 = NCacheController('s6').main()
-    controller3 = NCacheController('s7').main()
-    controller3 = NCacheController('s8').main()
-    controller3 = NCacheController('s9').main()

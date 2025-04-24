@@ -41,22 +41,8 @@ def build_message(op, key, seq=0, value = ""):
 class KVServer:
 
     def __init__(self, host, nocache=False, suppress=False, max_listen=10):
-        os.system("sysctl -w net.ipv4.conf.server1-eth0.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth1.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth2.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth3.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth4.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth5.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth6.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth7.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth8.rp_filter=0")
         # server ip address
         self.host1 = '0.0.0.0'
-        # self.host2 = host.split(' ')[1]
-        # self.host3 = host.split(' ')[2]
-        # self.host4 = host.split(' ')[3]
-        # self.host5 = host.split(' ')[4]
-        # server name
         self.name = 'server1'
 
         # port server is listening to
@@ -95,34 +81,9 @@ class KVServer:
         self.udpss1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.udpss1.bind((self.host1, self.port))
 
-        # self.udpss2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.udpss2.bind((self.host2, self.port))
-
-        # self.udpss3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.udpss3.bind((self.host3, self.port))
-
-        # self.udpss4 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.udpss4.bind((self.host4, self.port))
-
-        # self.udpss5 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.udpss5.bind((self.host5, self.port))
-
-        # create tcp socket server
-        #self.tcpss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #self.tcpss.bind((self.host1, self.port))
-        #self.tcpss.listen(1)
-
         # spawn new thread that serves incoming udp (read) queries
         server_udp_t1 = threading.Thread(target=self.handle_client_udp_request, args=(self.udpss1, ))
         server_udp_t1.start()
-        # server_udp_t2 = threading.Thread(target=self.handle_client_udp_request, args=(self.udpss2, ))
-        # server_udp_t2.start()
-        # server_udp_t3 = threading.Thread(target=self.handle_client_udp_request, args=(self.udpss3, ))
-        # server_udp_t3.start()
-        # server_udp_t4 = threading.Thread(target=self.handle_client_udp_request, args=(self.udpss4, ))
-        # server_udp_t4.start()
-        # server_udp_t5 = threading.Thread(target=self.handle_client_udp_request, args=(self.udpss5, ))
-        # server_udp_t5.start()
 
         # starting time of serving requests (used for throughput calculation)
         self.start_time = time.time()
@@ -173,8 +134,8 @@ class KVServer:
                 self.success_count += 1
                 #logging.info('Received READ_SUCCESS(' + str(self.total_time) + ') from client ' + addr[0] + ' success rate ' + str(self.success_count))
 
-                #if not self.suppress:
-                #    print('Received READ_SUCCESS() success count {} from switch {}'.format(str(self.success_count), str(switch_num)))
+                if not self.suppress:
+                    print('Received READ_SUCCESS() success count {} from switch {}'.format(str(self.success_count), str(switch_num)))
                 
                 if self.success_count % 2592 == 0:
                     print("All packets received")

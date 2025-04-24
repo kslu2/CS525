@@ -16,6 +16,7 @@ def main(n_servers, no_cache):
     print(f"Starting Time: {time.time()}")
     for _ in range(num_msg):
         client.read(key)
+        time.sleep(0.001)
 
 
 

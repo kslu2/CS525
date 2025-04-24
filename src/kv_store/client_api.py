@@ -45,16 +45,6 @@ def build_message(op, key = "", seq=0, value = ""):
 class NetCacheClient:
 
     def __init__(self, n_servers=1, no_cache=False):
-        os.system("for ip in $(arp -n | awk '{print $1}' | tail -n +2); do arp -d $ip; done")
-        os.system("arp -s 10.0.0.1 00:00:0a:00:00:01 -i client1-eth0")
-        os.system("arp -s 10.0.0.2 00:00:0a:00:00:02 -i client1-eth1")
-        os.system("arp -s 10.0.0.3 00:00:0a:00:00:03 -i client1-eth2")
-        os.system("arp -s 10.0.0.4 00:00:0a:00:00:04 -i client1-eth3")
-        os.system("arp -s 10.0.0.5 00:00:0a:00:00:05 -i client1-eth4")
-        os.system("arp -s 10.0.0.6 00:00:0a:00:00:06 -i client1-eth5")
-        os.system("arp -s 10.0.0.7 00:00:0a:00:00:07 -i client1-eth6")
-        os.system("arp -s 10.0.0.8 00:00:0a:00:00:08 -i client1-eth7")
-        os.system("arp -s 10.0.0.9 00:00:0a:00:00:09 -i client1-eth8")
         self.n_servers = n_servers
         self.request_received = 0
         self.successful_reads = 0
@@ -67,30 +57,6 @@ class NetCacheClient:
 
         self.sock_s1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock_s1.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth0')
-        
-        self.sock_s2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s2.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth1')
-
-        self.sock_s3 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s3.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth2')
-
-        self.sock_s4 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s4.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth3')
-
-        self.sock_s5 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s5.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth4')
-
-        self.sock_s6 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s6.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth5')
-
-        self.sock_s7 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s7.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth6')
-
-        self.sock_s8 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s8.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth7')
-
-        self.sock_s9 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock_s9.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, b'client1-eth8')
 
         # store all latencies of the requests sent (used for evaluation)
         self.latencies = []
@@ -101,34 +67,8 @@ class NetCacheClient:
         if msg is None:
             return
 
-        if self.request_received % NUM_SWITCH == 0:
-            sock = self.sock_s1
-            sock.sendto(msg, ("10.0.0.1", self.port))
-        elif self.request_received % NUM_SWITCH == 1:
-            sock = self.sock_s2
-            sock.sendto(msg, ("10.0.0.2", self.port))
-        elif self.request_received % NUM_SWITCH == 2:
-            sock = self.sock_s3
-            sock.sendto(msg, ("10.0.0.3", self.port))
-        elif self.request_received % NUM_SWITCH == 3:
-            sock = self.sock_s4
-            sock.sendto(msg, ("10.0.0.4", self.port))
-        elif self.request_received % NUM_SWITCH == 4:
-            sock = self.sock_s5
-            sock.sendto(msg, ("10.0.0.5", self.port))
-        elif self.request_received % NUM_SWITCH == 5:
-            sock = self.sock_s6
-            sock.sendto(msg, ("10.0.0.6", self.port))
-        elif self.request_received % NUM_SWITCH == 6:
-            sock = self.sock_s7
-            sock.sendto(msg, ("10.0.0.7", self.port))
-        elif self.request_received % NUM_SWITCH == 7:
-            sock = self.sock_s8
-            sock.sendto(msg, ("10.0.0.8", self.port))
-        elif self.request_received % NUM_SWITCH == 8:
-            sock = self.sock_s9
-            sock.sendto(msg, ("10.0.0.9", self.port))
-            time.sleep(0.001)
+        sock = self.sock_s1
+        sock.sendto(msg, ("10.0.0.1", self.port))
 
 
         '''
