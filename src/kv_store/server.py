@@ -78,6 +78,7 @@ class KVServer:
         self.unixss = None
 
         self.total_time = 0
+        self.rec_count_per_switch = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
 
     def activate(self):
 
@@ -173,8 +174,10 @@ class KVServer:
                 if not self.suppress:
                     print('Received READ_SUCCESS() success count {} from switch {}'.format(str(self.success_count), str(switch_num)))
                 
+                self.rec_count_per_switch[switch_num] = self.rec_count_per_switch[switch_num] + 1
                 if self.success_count % 2592 == 0:
                     print("All packets received")
+                    print(self.rec_count_per_switch)
                     print(f"Ending Time: {time.time()}")
 
 

@@ -107,7 +107,7 @@ class NetCacheClient:
         else:
             sock = self.sock_s6
             sock.sendto(msg, ("10.0.0.6", self.port))
-            time.sleep(0.002)
+            time.sleep(0.003)
 
         '''
         
