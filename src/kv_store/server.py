@@ -18,7 +18,7 @@ NETCACHE_WRITE_QUERY = 1
 NETCACHE_READ_QUERY = 0
 NETCACHE_INIT_QUERY = 6
 
-NUM_SWITCH = 9
+NUM_SWITCH = 6
 
 NETCACHE_REQUEST_SUCCESS = 10
 NETCACHE_KEY_NOT_FOUND = 20
@@ -47,9 +47,6 @@ class KVServer:
         os.system("sysctl -w net.ipv4.conf.server1-eth3.rp_filter=0")
         os.system("sysctl -w net.ipv4.conf.server1-eth4.rp_filter=0")
         os.system("sysctl -w net.ipv4.conf.server1-eth5.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth6.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth7.rp_filter=0")
-        os.system("sysctl -w net.ipv4.conf.server1-eth8.rp_filter=0")
         # server ip address
         self.host1 = '0.0.0.0'
         # self.host2 = host.split(' ')[1]
@@ -151,7 +148,7 @@ class KVServer:
             # requests waiting in the queue then serve those requests, elsewise
             # serve the new incoming packet
             netcache_pkt, addr = sock.recvfrom(1024)
-            switch_num = int(addr[0][-1]) % NUM_SWITCH
+            switch_num = int(addr[0].split(".")[-1]) % NUM_SWITCH
             if switch_num == 0:
                 switch_num = NUM_SWITCH
 
@@ -173,8 +170,8 @@ class KVServer:
                 self.success_count += 1
                 #logging.info('Received READ_SUCCESS(' + str(self.total_time) + ') from client ' + addr[0] + ' success rate ' + str(self.success_count))
 
-                #if not self.suppress:
-                #    print('Received READ_SUCCESS() success count {} from switch {}'.format(str(self.success_count), str(switch_num)))
+                if not self.suppress:
+                    print('Received READ_SUCCESS() success count {} from switch {}'.format(str(self.success_count), str(switch_num)))
                 
                 if self.success_count % 2592 == 0:
                     print("All packets received")

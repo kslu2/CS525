@@ -41,18 +41,12 @@
           ["client1", "s4"],
           ["client1", "s5"],
           ["client1", "s6"],
-          ["client1", "s7"],
-          ["client1", "s8"],
-          ["client1", "s9"],
           ["server1", "s1"],
           ["server1", "s2"],
           ["server1", "s3"],
           ["server1", "s4"],
           ["server1", "s5"],
-          ["server1", "s6"],
-          ["server1", "s7"],
-          ["server1", "s8"],
-          ["server1", "s9"]
+          ["server1", "s6"]
       ],
       "hosts": {
           "server1": { },
@@ -94,7 +88,7 @@
           "p4_src": "core/netcache.p4",
           "cpu_port": true,
           "cli_input": "s4-commands.txt",
-          "log_enabled": false,
+          "log_enabled": true,
           "pcap_dump": false,
           "sw_bin": "simple_switch",
           "thrift_port": 9093,
@@ -104,7 +98,7 @@
           "p4_src": "core/netcache.p4",
           "cpu_port": true,
           "cli_input": "s5-commands.txt",
-          "log_enabled": false,
+          "log_enabled": true,
           "pcap_dump": false,
           "sw_bin": "simple_switch",
           "thrift_port": 9094,
@@ -119,36 +113,6 @@
           "sw_bin": "simple_switch",
           "thrift_port": 9095,
           "grpc_port": 50056
-        },
-        "s7": {
-          "p4_src": "core/netcache.p4",
-          "cpu_port": true,
-          "cli_input": "s7-commands.txt",
-          "log_enabled": false,
-          "pcap_dump": false,
-          "sw_bin": "simple_switch",
-          "thrift_port": 9096,
-          "grpc_port": 50057
-        },
-        "s8": {
-          "p4_src": "core/netcache.p4",
-          "cpu_port": true,
-          "cli_input": "s8-commands.txt",
-          "log_enabled": false,
-          "pcap_dump": false,
-          "sw_bin": "simple_switch",
-          "thrift_port": 9097,
-          "grpc_port": 50058
-        },
-        "s9": {
-          "p4_src": "core/netcache.p4",
-          "cpu_port": true,
-          "cli_input": "s9-commands.txt",
-          "log_enabled": false,
-          "pcap_dump": false,
-          "sw_bin": "simple_switch",
-          "thrift_port": 9098,
-          "grpc_port": 50059
         }
       }
     }

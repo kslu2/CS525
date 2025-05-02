@@ -321,6 +321,3 @@ if __name__ == "__main__":
     controller3 = NCacheController('s4').main()
     controller3 = NCacheController('s5').main()
     controller3 = NCacheController('s6').main()
-    controller3 = NCacheController('s7').main()
-    controller3 = NCacheController('s8').main()
-    controller3 = NCacheController('s9').main()
