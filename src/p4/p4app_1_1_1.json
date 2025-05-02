@@ -47,7 +47,7 @@
           "p4_src": "core/netcache.p4",
           "cpu_port": true,
           "cli_input": "s1-commands.txt",
-          "log_enabled": true,
+          "log_enabled": false,
           "pcap_dump": false,
           "pcap_dir": "",
           "sw_bin": "simple_switch",

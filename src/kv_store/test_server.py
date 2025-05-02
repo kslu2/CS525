@@ -3,10 +3,10 @@ import time
 
 def main(n_servers, no_cache):
     client = NetCacheClient(n_servers=n_servers, no_cache=no_cache)
-    key = "12345678"
+    key = "testing"
     
-    target_size = (12 * 12 * 9 * 64 * 2 * 4)
-    value_size = 256
+    target_size = (36 * 20 * 9 * 64 * 2 * 4)
+    value_size = 512
     if target_size % value_size != 0:
         print("target_len must be divisible by value_len")
         return
@@ -16,7 +16,7 @@ def main(n_servers, no_cache):
     print(f"Starting Time: {time.time()}")
     for _ in range(num_msg):
         client.read(key)
-        time.sleep(0.001)
+        time.sleep(0.0002)
 
 
 

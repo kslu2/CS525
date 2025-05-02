@@ -40,7 +40,7 @@ class NetcacheHeader(Packet):
 
 class NCacheController(object):
 
-    def __init__(self, sw_name, vtables_num=16):
+    def __init__(self, sw_name, vtables_num=40):
         self.topo = load_topo('../p4/topology.json')
         self.sw_name = sw_name
         self.thrift_port = self.topo.get_thrift_port(self.sw_name)
@@ -305,7 +305,7 @@ class NCacheController(object):
         test_values_512 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666666666665555555544444444333333332222222211111111zzzzzzzzyyyyyyyyxxxxxxxxwwwwwwwwvvvvvvvvuuuuuuuuttttttttssssssssrrrrrrrrqqqqqqqqppppppppoooooooonnnnnnnnmmmmmmmmllllllllkkkkkkkkjjjjjjjjiiiiiiiihhhhhhhhggggggggffffffffeeeeeeeeddddddddccccccccbbbbbbbbaaaaaaaa"
         test_values_256 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnooooooooppppppppqqqqqqqqrrrrrrrrssssssssttttttttuuuuuuuuvvvvvvvvwwwwwwwwxxxxxxxxyyyyyyyyzzzzzzzz111111112222222233333333444444445555555566666666"
         test_values_128 = "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhhiiiiiiiijjjjjjjjkkkkkkkkllllllllmmmmmmmmnnnnnnnnoooooooopppppppp"
-        self.insert(test_keys_l, test_values_256, False)
+        self.insert(test_keys_l, test_values_512, False)
 
 
     def main(self):

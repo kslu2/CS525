@@ -51,245 +51,150 @@ control MyEgress(inout headers hdr,
 
 	// maintain 8 value tables since we need to spread them across stages
 	// where part of the value is created from each stage (4.4.2 section)
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt8;
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt9;
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt10;
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt11;
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt12;
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt13;
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt14;
-	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt15;
 
-	action process_array_8() {
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt20;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt21;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt22;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt23;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt24;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt25;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt26;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt27;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt28;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt29;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt30;
+	register<bit<NETCACHE_VTABLE_SLOT_WIDTH>>(NETCACHE_ENTRIES) vt31;
+
+	action process_array_20() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt8.read(val, (bit<32>) meta.vt_idx);
+		vt20.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt8.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt20.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt8.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	action process_array_9() {
+	action process_array_21() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt9.read(val, (bit<32>) meta.vt_idx);
+		vt21.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt9.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt21.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt9.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	action process_array_10() {
+	action process_array_22() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt10.read(val, (bit<32>) meta.vt_idx);
+		vt22.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt10.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt22.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt10.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	action process_array_11() {
+	action process_array_23() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt11.read(val, (bit<32>) meta.vt_idx);
+		vt23.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt11.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt23.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt11.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	action process_array_12() {
+	action process_array_24() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt12.read(val, (bit<32>) meta.vt_idx);
+		vt24.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt12.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt24.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt12.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	action process_array_13() {
+	action process_array_25() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt13.read(val, (bit<32>) meta.vt_idx);
+		vt25.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt13.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt25.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt13.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	action process_array_14() {
+	action process_array_26() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt14.read(val, (bit<32>) meta.vt_idx);
+		vt26.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt14.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt26.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt14.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	action process_array_15() {
+	action process_array_27() {
 		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
-		vt15.read(val, (bit<32>) meta.vt_idx);
+		vt27.read(val, (bit<32>) meta.vt_idx);
 		if (meta.recirc_cnt < 0x00000002) {
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-			vt15.read(val, (bit<32>) meta.vt_idx + 1);
-			hdr.netcache.value = (hdr.netcache.value << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+			vt27.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		//  else {
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-
-		// 	vt15.read(val, (bit<32>) meta.vt_idx + 1);
-		// 	hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
-		// }
 	}
 
-	table vtable_8 {
-		key = {
-			meta.vt_bitmap[7:7]: exact;
+	action process_array_28() {
+		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
+		vt28.read(val, (bit<32>) meta.vt_idx);
+		if (meta.recirc_cnt < 0x00000002) {
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+			vt28.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		actions = {
-			process_array_8;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
 	}
 
-	table vtable_9 {
-		key = {
-			meta.vt_bitmap[6:6]: exact;
+	action process_array_29() {
+		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
+		vt29.read(val, (bit<32>) meta.vt_idx);
+		if (meta.recirc_cnt < 0x00000002) {
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+			vt29.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		actions = {
-			process_array_9;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
 	}
 
-	table vtable_10 {
-		key = {
-			meta.vt_bitmap[5:5]: exact;
+	action process_array_30() {
+		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
+		vt30.read(val, (bit<32>) meta.vt_idx);
+		if (meta.recirc_cnt < 0x00000002) {
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
+
+			vt30.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		actions = {
-			process_array_10;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
 	}
 
-	table vtable_11 {
-		key = {
-			meta.vt_bitmap[4:4]: exact;
-		}
-		actions = {
-			process_array_11;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
-	}
+	action process_array_31() {
+		bit<NETCACHE_VTABLE_SLOT_WIDTH> val;
+		vt31.read(val, (bit<32>) meta.vt_idx);
+		if (meta.recirc_cnt < 0x00000002) {
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 
-	table vtable_12 {
-		key = {
-			meta.vt_bitmap[3:3]: exact;
+			vt31.read(val, (bit<32>) meta.vt_idx + 1);
+			hdr.netcache.value2 = (hdr.netcache.value2 << NETCACHE_VTABLE_SLOT_WIDTH) | (bit<NETCACHE_VALUE_WIDTH_MAX>) val;
 		}
-		actions = {
-			process_array_12;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
-	}
-
-	table vtable_13 {
-		key = {
-			meta.vt_bitmap[2:2]: exact;
-		}
-		actions = {
-			process_array_13;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
-	}
-
-	table vtable_14 {
-		key = {
-			meta.vt_bitmap[1:1]: exact;
-		}
-		actions = {
-			process_array_14;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
-	}
-
-	table vtable_15 {
-		key = {
-			meta.vt_bitmap[0:0]: exact;
-		}
-		actions = {
-			process_array_15;
-			NoAction;
-		}
-		size = NETCACHE_ENTRIES;
-		default_action = NoAction;
 	}
 
     apply {
@@ -305,9 +210,9 @@ control MyEgress(inout headers hdr,
 						if (meta.cache_valid) 
 						{
 							meta.vt_idx = meta.vt_idx + (bit<16>) meta.recirc_cnt;
-
-							vtable_8.apply(); vtable_9.apply(); vtable_10.apply(); vtable_11.apply();
-							vtable_12.apply(); vtable_13.apply(); vtable_14.apply(); vtable_15.apply();
+							process_array_20(); process_array_21(); process_array_22(); process_array_23();
+							process_array_24(); process_array_25(); process_array_26(); process_array_27();
+							process_array_28(); process_array_29(); process_array_30(); process_array_31();
 						}
 						increment_recirculation();
 						if (meta.recirc_cnt < RECIRCULATION_COUNT*2) {
@@ -316,7 +221,9 @@ control MyEgress(inout headers hdr,
 					}
 				}
 
-				NoAction: {}
+				NoAction: {
+					
+				}
 			}	
 		}
 	}

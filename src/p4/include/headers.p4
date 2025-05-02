@@ -5,9 +5,9 @@
 #define NETCACHE_ENTRIES 65536
 
 /* netcache value table constant definitions */
-#define INGRESS_VTABLE_NUM 8 // CHANGE THIS
-#define EGRESS_VTABLE_NUM 8 // CHANGE THIS
-#define NETCACHE_VTABLE_NUM 16
+#define INGRESS_VTABLE_NUM 20 // CHANGE THIS
+#define EGRESS_VTABLE_NUM 20 // CHANGE THIS
+#define NETCACHE_VTABLE_NUM 40
 #define NETCACHE_VTABLE_SIZE_WIDTH 16
 #define NETCACHE_VTABLE_SLOT_WIDTH 64   // in bits
 
@@ -154,6 +154,7 @@ header netcache_t {
 	bit<32> seq;
 	key_t  key;
 	value_t value;
+    value_t value2;
 }
 
 struct metadata {

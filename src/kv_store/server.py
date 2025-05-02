@@ -18,12 +18,12 @@ NETCACHE_WRITE_QUERY = 1
 NETCACHE_READ_QUERY = 0
 NETCACHE_INIT_QUERY = 6
 
-NUM_SWITCH = 9
+NUM_SWITCH = 1
 
 NETCACHE_REQUEST_SUCCESS = 10
 NETCACHE_KEY_NOT_FOUND = 20
 
-NETCACHE_VALUE_SIZE = 256
+NETCACHE_VALUE_SIZE = 512
 
 def convert(val):
     return int.from_bytes(bytes(val, "utf-8"), "big")
@@ -128,16 +128,26 @@ class KVServer:
             key = key.decode('utf-8').lstrip('\x00')
             seq = int.from_bytes(seq,'big')
             #transform val to string
-
+            value = value.decode("utf-8")
             if op == NETCACHE_READ_QUERY:
                 #self.total_time += float(time.time())
                 self.success_count += 1
                 #logging.info('Received READ_SUCCESS(' + str(self.total_time) + ') from client ' + addr[0] + ' success rate ' + str(self.success_count))
 
                 if not self.suppress:
-                    print('Received READ_SUCCESS() success count {} from switch {}'.format(str(self.success_count), str(switch_num)))
+                    print('Received READ_SUCCESS() success count {} for time {}'.format(str(self.success_count), str(switch_num)))
+                    #print('Received Value: ({})'.format(str(value)))
                 
-                if self.success_count % 2592 == 0:
+                if self.success_count % 6480 == 0:
+                    print("All packets received")
+                    print(f"Ending Time: {time.time()}")
+
+            elif op == NETCACHE_READ_FAIL:
+                self.success_count += 1
+                if not self.suppress:
+                    print('Received READ_FAIL() success count {} for time {}'.format(str(self.success_count), str(switch_num)))
+                
+                if self.success_count % 6480 == 0:
                     print("All packets received")
                     print(f"Ending Time: {time.time()}")
 
